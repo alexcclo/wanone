@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanone - Your Safe Space</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        .background {
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+        .logo img {
+            height: 28px; /* Adjust as needed */
+        }
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+        .sign-in {
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            border-radius: 20px;
+            padding: 2px; /* This creates the border thickness */
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .sign-in span {
+            display: block;
+            background: white;
+            color: #333;
+            padding: 6px 18px;
+            border-radius: 18px; /* Slightly smaller than parent to show gradient */
+            font-weight: bold;
+        }
+        .register {
+            background-color: #333;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid #333;
+            font-weight: bold;
+        }
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        h1 {
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+        .cta-button {
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            border-radius: 25px;
+            padding: 2px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .cta-button span {
+            display: block;
+            background-color: white;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 23px; /* Slightly smaller than parent to show gradient */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <header>
+            <div class="logo">
+                <img src="Logo.png" alt="Wanone Logo">
+            </div>
+            <nav>
+                <a href="#">Products</a>
+                <a href="#" class="sign-in"><span>Sign in</span></a>
+                <a href="#" class="register">Register</a>
+            </nav>
+        </header>
+        <main>
+            <h1>Your Journey.<br>Your Pride.<br>Your Safe Space.</h1>
+            <p>Inclusive Support, Personalized Care<br>
+            Empowering LGBTQ+ Mental Health Journeys<br>
+            Through Connection and Understanding with AI.</p>
+            <a href="scenario.html" class="cta-button"><span>Start a Safe Conversation</span></a>
+        </main>
+    </div>
+</body>
+</html>

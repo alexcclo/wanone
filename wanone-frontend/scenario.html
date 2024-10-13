@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Scenario - LGBTQ+ Therapy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid white;
+        }
+        .logo img {
+            height: 28px;
+        }
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+        .sign-in {
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            border-radius: 20px;
+            padding: 2px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .sign-in span {
+            display: block;
+            background: white;
+            color: #333;
+            padding: 6px 18px;
+            border-radius: 18px;
+            font-weight: bold;
+        }
+        .register {
+            background-color: #333;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid #333;
+            font-weight: bold;
+        }
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .scenarios {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .scenario-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .scenario-card:hover {
+            transform: translateY(-5px);
+        }
+        .scenario-card.selected {
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3) 1;
+        }
+        .scenario-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .other-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .submit-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .submit-button {
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            border-radius: 25px;
+            padding: 2px;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .submit-button span {
+            display: block;
+            background-color: white;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 23px;
+            font-weight: bold;
+        }
+        .selection-count {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+        .other-card {
+            grid-column: span 2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="Logo.png" alt="Wanone Logo">
+        </div>
+        <nav>
+            <a href="#">Products</a>
+            <a href="#" class="sign-in"><span>Sign in</span></a>
+            <a href="#" class="register">Register</a>
+        </nav>
+    </header>
+    <div class="content">
+        <h1>Choose what you want to talk about</h1>
+        <p class="subtitle">Choose up to 3 topics that matter most to you.<br>Let's focus on what's important and start the conversation where you feel comfortable.</p>
+        <div class="scenarios" id="scenario-container">
+            <!-- Scenario cards will be dynamically added here -->
+        </div>
+        <div class="submit-container">
+            <button class="submit-button" onclick="submitSelection()"><span>Submit</span></button>
+            <div class="selection-count">0/3</div>
+        </div>
+    </div>
+
+    <script>
+        const scenarios = [
+            {
+                title: "Coming Out and Identity Exploration",
+                description: "Guiding you through understanding and accepting your sexual orientation or gender identity."
+            },
+            {
+                title: "Family Acceptance Issues",
+                description: "Helping you navigate rejection, misunderstanding, or strained family relationships."
+            },
+            {
+                title: "Workplace Discrimination",
+                description: "Supporting you in dealing with prejudice, harassment, or unfair treatment in professional settings."
+            },
+            {
+                title: "Internalized Homophobia or Transphobia",
+                description: "Assisting you in working through negative self-beliefs internalized from society."
+            },
+            {
+                title: "Trauma from Hate Crimes or Violence",
+                description: "Helping you process experiences of physical or emotional abuse targeted at your identity."
+            },
+            {
+                title: "Healthcare Disparities",
+                description: "Addressing challenges in accessing affirming and competent healthcare services."
+            },
+            {
+                title: "Substance Abuse Issues",
+                description: "Tackling higher rates of substance use often related to minority stress."
+            },
+            {
+                title: "Intersectionality Challenges",
+                description: "Managing the complex interplay of multiple marginalized identities."
+            },
+            {
+                title: "Legal and Social Challenges",
+                description: "Supporting you in coping with changing laws, policies, and social attitudes."
+            },
+            {
+                title: "Mental Health Concerns",
+                description: "Addressing higher rates of anxiety, depression, and societal pressures."
+            }
+        ];
+
+        const container = document.getElementById('scenario-container');
+        const selectionCountElement = document.querySelector('.selection-count');
+
+        scenarios.forEach((scenario, index) => {
+            const card = document.createElement('div');
+            card.className = 'scenario-card';
+            card.innerHTML = `
+                <div class="scenario-title">${scenario.title}</div>
+                <div class="scenario-description">${scenario.description}</div>
+            `;
+            card.onclick = function() { toggleSelection(this); };
+            container.appendChild(card);
+        });
+
+        // Add the "Other" option
+        const otherCard = document.createElement('div');
+        otherCard.className = 'scenario-card other-card';
+        otherCard.innerHTML = `
+            <div class="scenario-title">Other</div>
+            <div class="scenario-description">None of these apply? Type your own topic here:</div>
+            <input type="text" class="other-input" placeholder="Type your own topic here">
+        `;
+        container.appendChild(otherCard);
+
+        function toggleSelection(element) {
+            element.classList.toggle('selected');
+            updateSelectionCount();
+        }
+
+        function updateSelectionCount() {
+            const selectedCount = document.querySelectorAll('.scenario-card.selected').length;
+            selectionCountElement.textContent = `${selectedCount}/3`;
+            if (selectedCount > 3) {
+                alert('You can only select up to 3 topics.');
+                element.classList.remove('selected');
+                updateSelectionCount();
+            }
+        }
+
+        function submitSelection() {
+            const selectedScenarios = Array.from(document.querySelectorAll('.scenario-card.selected'))
+                .map(card => card.querySelector('.scenario-title').textContent);
+            const otherInput = document.querySelector('.other-input').value.trim();
+            if (otherInput) {
+                selectedScenarios.push(`Other: ${otherInput}`);
+            }
+            if (selectedScenarios.length > 0 && selectedScenarios.length <= 3) {
+                // Redirect to the form page
+                window.location.href = 'form.html';
+            } else if (selectedScenarios.length === 0) {
+                alert('Please select at least one topic before submitting.');
+            } else {
+                alert('Please select no more than 3 topics.');
+            }
+        }
+    </script>
+</body>
+</html>

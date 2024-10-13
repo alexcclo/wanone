@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Summary</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- jQuery and jQuery UI for Calendar -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .summary-container {
+            display: flex;
+            margin-top: 20px;
+        }
+        .summary-left, .summary-right {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .summary-left {
+            width: 60%;
+            margin-right: 20px;
+        }
+        .summary-right {
+            width: 35%;
+        }
+        .progress-header, .next-steps-header {
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.3rem;
+            color: #9147ff;
+        }
+        .calendar {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .session-notes, .next-steps {
+            margin-bottom: 30px;
+        }
+        .ui-datepicker td a.ui-state-active {
+            background-color: #9147ff !important; /* Highlight selected date */
+        }
+        .therapy-attended a {
+            color: black !important; /* Dark text for therapy-attended dates */
+            font-weight: bold;
+        }
+        .non-therapy a {
+            color: #d3d3d3 !important; /* Lighter text for non-therapy dates */
+        }
+        #session-notes-content {
+            white-space: pre-line; /* Keep line breaks */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Session Summary</h1>
+        <div class="summary-container">
+            <!-- Left side: Progress and notes -->
+            <div class="summary-left">
+                <div class="session-notes">
+                    <h2 class="progress-header">Session Notes</h2>
+                    <p id="session-notes-content">Here are the notes from your recent session. You discussed managing stress and creating a balance between work and life. You also explored new coping mechanisms for anxiety.</p>
+                </div>
+
+                <div class="next-steps">
+                    <h2 class="next-steps-header">What You Can Do Next</h2>
+                    <ul>
+                        <li>Practice deep breathing exercises daily.</li>
+                        <li>Maintain a work-life balance by setting boundaries.</li>
+                        <li>Start journaling to track your emotions.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right side: Calendar -->
+            <div class="summary-right">
+                <h2 class="progress-header">Pick a Session Date</h2>
+                <div id="calendar" class="calendar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery and jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Simulated list of dates where the user attended therapy
+            const therapyDates = ["10/05/2024", "10/08/2024", "10/12/2024"];
+
+            // Initialize the calendar with custom rendering for therapy and non-therapy dates
+            $("#calendar").datepicker({
+                beforeShowDay: function(date) {
+                    const dateString = $.datepicker.formatDate('mm/dd/yy', date);
+                    // If the date matches a therapy date, make it bold/dark
+                    if (therapyDates.includes(dateString)) {
+                        return [true, "therapy-attended", "Therapy Attended"];
+                    } else {
+                        // Make the non-therapy dates lighter
+                        return [true, "non-therapy", ""];
+                    }
+                },
+                onSelect: function(dateText) {
+                    // Check if the selected date is a therapy date
+                    if (therapyDates.includes(dateText)) {
+                        // Show notes for the selected therapy session with a bullet and new line
+                        $("#session-notes-content").html(`Showing notes for ${dateText}.\n• You discussed managing anxiety and setting life goals.`);
+                    } else {
+                        // Show message if no therapy was attended on this date
+                        $("#session-notes-content").html(`No session on ${dateText}.`);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

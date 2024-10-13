@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WenOne LGBTQ+ Assistant</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Font and body styling */
+        body {
+            font-family: 'Poppins', sans-serif; /* Modern, clean font */
+            background-color: #f1f8ff; /* Soothing light blue background */
+            color: #4b4b4b; /* Neutral text color */
+            padding: 20px;
+        }
+        h1 {
+            background: linear-gradient(90deg, #ff66b2, #9147ff, #50d890);
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .chat-box {
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .chat-message {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .chat-bubble {
+            max-width: 60%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            position: relative;
+            font-size: 0.95rem;
+        }
+        /* User's message */
+        .chat-message.user .chat-bubble {
+            background-color: #d1e7ff;
+            align-self: flex-end;
+            margin-left: auto;
+            color: #0d6efd;
+        }
+        /* Wanone's message */
+        .chat-message.wanone .chat-bubble {
+            background-color: #f3e5f5;
+            align-self: flex-start;
+            color: #9147ff;
+        }
+        .input-group {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+            border-radius: 20px;
+            border: 1px solid #ced4da;
+            margin-right: 10px; /* Added spacing between input and button */
+        }
+        /* Send button with rainbow gradient */
+        #send-btn {
+            background: linear-gradient(90deg, #ff66b2, #9147ff, #50d890); /* Rainbow gradient */
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        #send-btn:hover {
+            transform: scale(1.05); /* Slight hover effect */
+        }
+
+        /* End conversation button with rainbow gradient */
+        #end-btn {
+            background: linear-gradient(90deg, #50d890, #ffba93, #ff66b2, #9147ff); /* Rainbow gradient */
+            color: white;
+            border-radius: 20px;
+            border: none;
+            padding: 8px 20px;
+            font-size: 1rem;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        #end-btn:hover {
+            transform: scale(1.05); /* Slight hover effect */
+        }
+        /* Styles for clicked feedback buttons */
+        .clicked-like {
+            background-color: #198754;
+            color: white;
+        }
+        .clicked-dislike {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>WenOne LGBTQ+ Assistant</h1>
+        <div class="chat-box" id="chat-box">
+            <!-- Chat messages will appear here -->
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="user-input" placeholder="Type your message...">
+            <button class="btn" id="send-btn">Send</button>
+        </div>
+
+        <div class="text-center">
+            <button id="end-btn">End Conversation</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
+    <script>
+        let conversationUuid;
+
+        // Generate UUID on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            conversationUuid = sessionStorage.getItem('conversationUuid');
+            if (!conversationUuid) {
+                conversationUuid = uuid.v4().replace(/-/g, "")
+                sessionStorage.setItem('conversationUuid', conversationUuid);
+            }
+        });
+
+        // Auto-send message when "Enter" key is pressed
+        document.getElementById('user-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        document.getElementById('end-btn').addEventListener('click', endConversation);
+
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            if (userInput.trim()) {
+                addMessage('user', userInput);
+                document.getElementById('user-input').value = '';
+
+                try {
+                    const response = await fetch('https://ai.oshop.io/gen/api/agent/AI/Reply', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            conversation_uuid: conversationUuid,
+                            message: userInput,
+                            agent: "MENTAL"
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const data = await response.json();
+                    if (data.status === "success") {
+                        addMessage('wanone', data.message);
+                    } else {
+                        console.error('API returned an error:', data);
+                        addMessage('wanone', 'Sorry, I encountered an error. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    addMessage('wanone', 'Sorry, I encountered an error. Please try again.');
+                }
+            }
+        }
+
+        function addMessage(sender, message) {
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+
+            const bubble = document.createElement('div');
+            bubble.classList.add('chat-bubble');
+            bubble.textContent = message;
+
+            messageElement.appendChild(bubble);
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;  // Auto scroll to the bottom
+        }
+
+        function endConversation() {
+            addMessage('wanone', "Thank you for sharing. If you need more support, feel free to reach out again. Take care!");
+            
+            // Disable input after ending conversation
+            document.getElementById('user-input').disabled = true;
+            document.getElementById('send-btn').disabled = true;
+        }
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
