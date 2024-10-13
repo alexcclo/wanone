@@ -3,125 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Session Summary</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
+    <title>Wanone Mood Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- jQuery and jQuery UI for Calendar -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
-        body {
+        body, html {
             font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
-        .summary-container {
+        header {
             display: flex;
-            margin-top: 20px;
-        }
-        .summary-left, .summary-right {
+            justify-content: space-between;
+            align-items: center;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.8);
         }
-        .summary-left {
-            width: 60%;
-            margin-right: 20px;
+        .logo img {
+            height: 28px;
         }
-        .summary-right {
-            width: 35%;
+        nav {
+            display: flex;
+            align-items: center;
         }
-        .progress-header, .next-steps-header {
-            margin-bottom: 15px;
-            font-weight: 600;
-            font-size: 1.3rem;
-            color: #9147ff;
+        nav a {
+            color: #333;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
         }
-        .calendar {
-            width: 100%;
-            border-radius: 10px;
+        .sign-in {
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            border-radius: 20px;
+            padding: 2px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
-        .session-notes, .next-steps {
-            margin-bottom: 30px;
-        }
-        .ui-datepicker td a.ui-state-active {
-            background-color: #9147ff !important; /* Highlight selected date */
-        }
-        .therapy-attended a {
-            color: black !important; /* Dark text for therapy-attended dates */
+        .sign-in span {
+            display: block;
+            background: white;
+            color: #333;
+            padding: 6px 18px;
+            border-radius: 18px;
             font-weight: bold;
         }
-        .non-therapy a {
-            color: #d3d3d3 !important; /* Lighter text for non-therapy dates */
+        .register {
+            background-color: #333;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 2px solid #333;
+            font-weight: bold;
         }
-        #session-notes-content {
-            white-space: pre-line; /* Keep line breaks */
+        main {
+            display: flex;
+            padding: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .left-column {
+            width: 300px;
+            margin-right: 20px;
+        }
+        .calendar {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .calendar-header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+        }
+        .calendar-nav button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+        .recent-button {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .calendar-day {
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            cursor: pointer;
+        }
+        .calendar-day.header {
+            font-weight: bold;
+            color: #999;
+            cursor: default;
+        }
+        .calendar-day.inactive {
+            color: #ccc;
+        }
+        .calendar-day.active {
+            color: #333;
+        }
+        .calendar-day.current {
+            background-color: #9c27b0;
+            color: white;
+        }
+        .calendar-day.logged {
+            font-weight: bold;
+        }
+        .mood-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .mood-graph img {
+            width: 100%;
+            height: auto;
+        }
+        .dashboard {
+            flex-grow: 1;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .dashboard-header h2 {
+            margin: 0;
+        }
+        .dashboard-header button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .rainbow-line {
+            height: 2px;
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            margin: 10px 0;
+        }
+        .mood-check-in {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .mood-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #9c27b0;
+            margin-right: 20px;
+        }
+        .mood-description {
+            flex-grow: 1;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h3 {
+            margin-bottom: 10px;
+            color: #9c27b0;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Session Summary</h1>
-        <div class="summary-container">
-            <!-- Left side: Progress and notes -->
-            <div class="summary-left">
-                <div class="session-notes">
-                    <h2 class="progress-header">Session Notes</h2>
-                    <p id="session-notes-content">Here are the notes from your recent session. You discussed managing stress and creating a balance between work and life. You also explored new coping mechanisms for anxiety.</p>
+    <header>
+        <div class="logo">
+            <img src="Logo.png" alt="Wanone Logo">
+        </div>
+        <nav>
+            <a href="#">Products</a>
+            <a href="#" class="sign-in"><span>Sign in</span></a>
+            <a href="#" class="register">Register</a>
+        </nav>
+    </header>
+    <main>
+        <div class="left-column">
+            <div class="calendar">
+                <div class="calendar-header">
+                    <div class="calendar-nav">
+                        <button id="prev-month">&lt;</button>
+                        <h2 id="current-month-year"></h2>
+                        <button id="next-month">&gt;</button>
+                    </div>
+                    <button class="recent-button">Recent</button>
                 </div>
-
-                <div class="next-steps">
-                    <h2 class="next-steps-header">What You Can Do Next</h2>
-                    <ul>
-                        <li>Practice deep breathing exercises daily.</li>
-                        <li>Maintain a work-life balance by setting boundaries.</li>
-                        <li>Start journaling to track your emotions.</li>
-                    </ul>
+                <div class="calendar-grid">
+                    <div class="calendar-day header">S</div>
+                    <div class="calendar-day header">M</div>
+                    <div class="calendar-day header">T</div>
+                    <div class="calendar-day header">W</div>
+                    <div class="calendar-day header">T</div>
+                    <div class="calendar-day header">F</div>
+                    <div class="calendar-day header">S</div>
+                    <!-- Calendar days will be inserted here by JavaScript -->
                 </div>
             </div>
-
-            <!-- Right side: Calendar -->
-            <div class="summary-right">
-                <h2 class="progress-header">Pick a Session Date</h2>
-                <div id="calendar" class="calendar"></div>
+            <div class="mood-section">
+                <h3>Your Mood</h3>
+                <div class="mood-graph">
+                    <img src="Mood Board.png" alt="Mood Graph">
+                </div>
+                <p>Remember, it's natural for your mood to have ups and downs. Simply recording how you feel is progress—it helps you stay mindful and connected to your emotions.</p>
             </div>
         </div>
-    </div>
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <h2 id="selected-date"></h2>
+                <div>
+                    <button id="clear-memory">Clear Memory</button>
+                    <button id="menu">•••</button>
+                </div>
+            </div>
+            <div class="rainbow-line"></div>
+            <div class="mood-check-in">
+                <div id="mood-number" class="mood-number"></div>
+                <div class="mood-description">
+                    <h3>Mood Check-in</h3>
+                    <p id="mood-description"></p>
+                </div>
+            </div>
+            <div class="section">
+                <h3>Gratitude Diary</h3>
+                <p id="gratitude-diary"></p>
+            </div>
+            <div class="section">
+                <h3>Notes</h3>
+                <ul id="notes-list"></ul>
+            </div>
+            <div class="section">
+                <h3>What you can do next?</h3>
+                <p id="next-steps"></p>
+            </div>
+        </div>
+    </main>
 
-    <!-- jQuery and jQuery UI -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Simulated list of dates where the user attended therapy
-            const therapyDates = ["10/05/2024", "10/08/2024", "10/12/2024"];
+        let currentDate = new Date();
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        let loggedDays = [];
 
-            // Initialize the calendar with custom rendering for therapy and non-therapy dates
-            $("#calendar").datepicker({
-                beforeShowDay: function(date) {
-                    const dateString = $.datepicker.formatDate('mm/dd/yy', date);
-                    // If the date matches a therapy date, make it bold/dark
-                    if (therapyDates.includes(dateString)) {
-                        return [true, "therapy-attended", "Therapy Attended"];
-                    } else {
-                        // Make the non-therapy dates lighter
-                        return [true, "non-therapy", ""];
-                    }
-                },
-                onSelect: function(dateText) {
-                    // Check if the selected date is a therapy date
-                    if (therapyDates.includes(dateText)) {
-                        // Show notes for the selected therapy session with a bullet and new line
-                        $("#session-notes-content").html(`Showing notes for ${dateText}.\n• You discussed managing anxiety and setting life goals.`);
-                    } else {
-                        // Show message if no therapy was attended on this date
-                        $("#session-notes-content").html(`No session on ${dateText}.`);
-                    }
+        function updateCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            document.getElementById('current-month-year').textContent = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDay = firstDay.getDay();
+
+            const calendarGrid = document.querySelector('.calendar-grid');
+            // Clear existing calendar days except headers
+            while (calendarGrid.children.length > 7) {
+                calendarGrid.removeChild(calendarGrid.lastChild);
+            }
+
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < startingDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.classList.add('calendar-day', 'inactive');
+                calendarGrid.appendChild(emptyDay);
+            }
+
+            // Add days of the month
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('calendar-day', 'active');
+                dayElement.textContent = day;
+
+                if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                    dayElement.classList.add('current');
                 }
-            });
+                
+                const fullDate = new Date(year, month, day);
+                if (loggedDays.some(d => d.getTime() === fullDate.getTime())) {
+                    dayElement.classList.add('logged');
+                }
+
+                dayElement.addEventListener('click', () => selectDate(new Date(year, month, day)));
+                calendarGrid.appendChild(dayElement);
+            }
+
+            updateDashboard(new Date(year, month, today.getDate()));
+        }
+
+        function selectDate(date) {
+            updateDashboard(date);
+        }
+
+        function updateDashboard(date) {
+            document.getElementById('selected-date').textContent = date.toDateString();
+            const checkInCount = loggedDays.length;
+            document.getElementById('mood-number').textContent = checkInCount;
+            
+            // Update other dashboard elements (this is placeholder content)
+            document.getElementById('mood-description').textContent = `You've checked in ${checkInCount} times this month.`;
+            document.getElementById('gratitude-diary').textContent = "You shared three things you're grateful for this week: seeing birds, enjoying nice weather, and a random woman being kind to you this morning.";
+            document.getElementById('notes-list').innerHTML = "<li>Family Disagreement: We discussed how your parents' opposition to gay marriage has been disappointing and hurtful for you, contributing to feelings of depression.</li><li>Coping with Depression: You mentioned that your depression made you feel like staying in bed all day and avoiding conversations with friends, even though you love them.</li><li>Support Strategies: We explored a few ways to help you cope, including journaling, connecting with nature (since you enjoy seeing birds), and possibly reaching out to a trusted adult for support.</li>"
+            document.getElementById('next-steps').textContent = "Age and Limited Support: You shared that, at 14, you feel there aren't many people to talk to, but you're open to exploring small steps to help yourself feel better.";
+        }
+
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            updateCalendar();
         });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            updateCalendar();
+        });
+
+        // Simulate logged days (replace with actual data in a real application)
+        for (let i = 1; i <= 7; i++) {
+            const randomDay = Math.floor(Math.random() * 28) + 1;
+            loggedDays.push(new Date(currentDate.getFullYear(), currentDate.getMonth(), randomDay));
+        }
+
+        updateCalendar();
     </script>
 </body>
 </html>
