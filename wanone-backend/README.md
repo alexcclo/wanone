@@ -17,28 +17,28 @@ Installation
 
 Clone the repository:
 
-'''
-Copygit clone <https://github.com/alexcclo/wanone.git>
+```bash
+git clone <https://github.com/alexcclo/wanone.git>
 cd wanone-backend
-'''
+```
 
 Create a virtual environment and activate it:
 
-'''
+```bash
 python -m venv venv
 source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-'''
+```
 
 Install the required packages:
-'''
+```bash
 pip install -r requirements.txt
-'''
+```
 
 Set up your environment variables by creating a .env file in the project root:
 
-'''
+```python
 SQLALCHEMY_DATABASE_URI=mysql+pymysql://username:password@host/database_name
-'''
+```
 
 ## Usage
 
